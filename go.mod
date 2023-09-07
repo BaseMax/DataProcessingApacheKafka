@@ -10,6 +10,7 @@ require (
 	github.com/labstack/echo/v4 v4.11.1
 	github.com/nats-io/nats.go v1.28.0
 	github.com/rabbitmq/amqp091-go v1.8.1
+	github.com/segmentio/kafka-go v0.4.42
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.4
 )
@@ -29,6 +30,7 @@ require (
 	github.com/nats-io/nats-server/v2 v2.9.21 // indirect
 	github.com/nats-io/nkeys v0.4.4 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
+	github.com/pierrec/lz4/v4 v4.1.15 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	golang.org/x/crypto v0.11.0 // indirect

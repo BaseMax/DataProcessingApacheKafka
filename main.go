@@ -31,11 +31,15 @@ func main() {
 	}
 
 	if err := notifications.InitNats(); err != nil {
-		log.Fatal(err)
+		log.Fatal("nats init: ", err)
 	}
 
 	if err := rabbitmq.Connect(); err != nil {
-		log.Fatal(err)
+		log.Fatal("rabbitmq init: ", err)
+	}
+
+	if err := notifications.InitKafka(); err != nil {
+		log.Fatal("kafka init: ", err)
 	}
 
 	r := InitRoutes()

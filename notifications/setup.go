@@ -1,18 +1,40 @@
 package notifications
 
-import "github.com/nats-io/nats.go"
+import (
+	"context"
 
-var conn *nats.Conn
+	"github.com/nats-io/nats.go"
+	"github.com/segmentio/kafka-go"
+)
+
+var (
+	nConn *nats.Conn
+	kConn *kafka.Conn
+)
 
 func InitNats() error {
 	var err error
-	conn, err = nats.Connect(GetNatsURL())
+	nConn, err = nats.Connect(GetNatsURL())
+	return err
+}
+
+func GetNatsConn() *nats.Conn {
+	return nConn
+}
+
+func InitKafka() error {
+	var err error
+
+	conf, err := GetKafkaConfig()
 	if err != nil {
 		return err
 	}
-	return nil
+
+	kConn, err = kafka.DialLeader(context.Background(),
+		conf.Protocol, conf.Server, conf.Topic, conf.Partition)
+	return err
 }
 
-func GetConn() *nats.Conn {
-	return conn
+func GetKafkaConn() *kafka.Conn {
+	return kConn
 }

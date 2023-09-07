@@ -9,13 +9,14 @@ import (
 )
 
 func Notify(activity models.Activity) *NotifErr {
+
 	if err := models.Create(&activity); err != nil {
 		return &NotifErr{Err: err.Err, HTTPError: err.HttpErr}
 	}
 
 	subject := CreateSubject(activity.RecieverID)
 	data, _ := json.Marshal(activity)
-	if err := conn.Publish(subject, data); err != nil {
+	if err := nConn.Publish(subject, data); err != nil {
 		return &NotifErr{Err: err, HTTPError: *echo.ErrInternalServerError}
 	}
 

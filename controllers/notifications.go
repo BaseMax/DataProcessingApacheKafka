@@ -27,7 +27,7 @@ func Notification(c echo.Context) error {
 	}
 	defer cleaner()
 
-	conn := notifications.GetConn()
+	conn := notifications.GetNatsConn()
 	subject := notifications.CreateSubject(helpers.GetLoggedinInfo(c).ID)
 	sub, err = conn.Subscribe(subject, func(msg *nats.Msg) {
 		json.Unmarshal(msg.Data, &data)
