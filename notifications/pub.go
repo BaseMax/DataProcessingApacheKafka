@@ -20,5 +20,5 @@ func Notify(activity models.Activity) *NotifErr {
 		return &NotifErr{Err: err, HTTPError: *echo.ErrInternalServerError}
 	}
 
-	return nil
+	return NotifyKafka(activity)
 }
