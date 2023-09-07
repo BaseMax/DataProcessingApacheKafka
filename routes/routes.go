@@ -1,4 +1,4 @@
-package main
+package routes
 
 import (
 	echojwt "github.com/labstack/echo-jwt/v4"

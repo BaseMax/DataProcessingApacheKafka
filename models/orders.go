@@ -4,7 +4,7 @@ type Order struct {
 	ID       uint      `gorm:"primaryKey" json:"id"`
 	User     User      `json:"-"`
 	UserID   uint      `gorm:"not null" json:"user_id"`
-	Status   string    `gorm:"default:IN-PROGRESS" json:"status"`
+	Status   string    `gorm:"default:IN_PROGRESS" json:"status"`
 	Products []Product `gorm:"many2many:order_products" json:"products,omitempty"`
 }
 

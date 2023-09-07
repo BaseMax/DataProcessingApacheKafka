@@ -110,6 +110,21 @@ services:
     ports:
       - 4222:4222
 
+  consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: consumer
+    container_name: consumer
+    restart: always
+    ports:
+      - "${MONITORING_PORT}:${MONITORING_PORT}"
+    depends_on:
+      - prometheus
+      - grafana
+      - kafka
+    command: monitoring
+
   app:
     build:
       context: .

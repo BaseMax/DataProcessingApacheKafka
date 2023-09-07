@@ -1,47 +1,23 @@
+/*
+Copyright © 2023 Alireza Arzehgar
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 package main
 
-import (
-	"log"
-
-	"github.com/joho/godotenv"
-
-	"github.com/BaseMax/real-time-notifications-nats-go/controllers"
-	"github.com/BaseMax/real-time-notifications-nats-go/database"
-	"github.com/BaseMax/real-time-notifications-nats-go/models"
-	"github.com/BaseMax/real-time-notifications-nats-go/notifications"
-	"github.com/BaseMax/real-time-notifications-nats-go/rabbitmq"
-)
+import "github.com/BaseMax/real-time-notifications-nats-go/cmd"
 
 func main() {
-	if err := godotenv.Load(".env"); err != nil {
-		log.Fatal("godotenv: ", err)
-	}
-
-	c, err := database.ReadConfig()
-	if err != nil {
-		log.Fatal("readconfig: ", err)
-	}
-
-	conn, err := database.OpenPostgres(c)
-	if err != nil {
-		log.Fatal("open postgres: ", err)
-	}
-	if err := models.Init(conn); err != nil {
-		log.Fatal("models init: ", err)
-	}
-
-	if err := notifications.InitNats(); err != nil {
-		log.Fatal("nats init: ", err)
-	}
-
-	if err := rabbitmq.Connect(); err != nil {
-		log.Fatal("rabbitmq init: ", err)
-	}
-
-	if err := notifications.InitKafka(); err != nil {
-		log.Fatal("kafka init: ", err)
-	}
-
-	r := InitRoutes()
-	r.Logger.Fatal(r.Start(controllers.GetRunningAddr()))
+	cmd.Execute()
 }

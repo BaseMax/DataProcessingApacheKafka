@@ -1,14 +1,20 @@
 package models
 
 const (
-	TASK_INPROGRESS = "IN-PROGRESS"
+	TASK_INPROGRESS = "IN_PROGRESS"
 	TASK_DONE       = "DONE"
 	TASK_CANCELED   = "CANCELED"
 	TASK_BROWSE     = "BROWSE"
 
 	ACTION_REGISTER   = "REGISTER"
-	ACTION_NEW_RECORD = "NEW RECORD"
+	ACTION_NEW_RECORD = "NEW_RECORD"
 )
+
+var ACTIONS = []string{
+	TASK_INPROGRESS, TASK_DONE,
+	TASK_CANCELED, TASK_BROWSE,
+	ACTION_REGISTER, ACTION_NEW_RECORD,
+}
 
 type Activity struct {
 	ID         uint   `gorm:"primaryKey" json:"id"`

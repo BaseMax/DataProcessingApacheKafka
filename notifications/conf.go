@@ -40,7 +40,7 @@ type KafkaConfig struct {
 func GetKafkaConfig() (*KafkaConfig, error) {
 	partition, err := strconv.Atoi(os.Getenv("KAFKA_PARTITION"))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to parse: %s: %w", os.Getenv("KAFKA_PARTITION"), err)
 	}
 	return &KafkaConfig{
 		Protocol:  "tcp",

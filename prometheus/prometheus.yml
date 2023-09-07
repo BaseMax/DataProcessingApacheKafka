@@ -13,4 +13,4 @@ scrape_configs:
     target_limit: 0
     static_configs:
       - targets:
-          - "consumer:8000"
+          - "consumer:8080"
