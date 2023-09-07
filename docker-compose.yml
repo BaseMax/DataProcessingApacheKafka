@@ -17,7 +17,6 @@ services:
       - zookeeper
     ports:
       - "29092:29092"
-      - "9092:9092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
@@ -35,7 +34,10 @@ services:
     entrypoint: [ '/bin/sh', '-c' ]
     command: |
       "
-      kafka-topics --bootstrap-server kafka:9092 --create --topic activities --partitions 3 --replication-factor 1
+      kafka-topics --bootstrap-server kafka:9092
+                    --create --topic ${KAFKA_NOTIFICATION_TOPIC}
+                    --partitions ${KAFKA_PARTITIONS}
+                    --replication-factor 1
       "
 
   prometheus:
