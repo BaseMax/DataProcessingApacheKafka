@@ -39,7 +39,7 @@ func AddOrder(c echo.Context) error {
 	activities := models.Activity{
 		RecieverID: admin.ID,
 		Title:      fmt.Sprintf("We have new order from %s.", user.Username),
-		Action:     models.ACTION_NEW_RECORD,
+		Action:     models.ACTION_ORDER_NEW,
 		Task:       models.AnyToTask(order),
 	}
 	if err := notifications.Notify(activities); err != nil {
@@ -105,13 +105,16 @@ func CancelOrder(c echo.Context) error {
 }
 
 func GetFirstQueuedOrder(c echo.Context) error {
-	return ProcessFirstQueuedTask[models.Order](c, rabbitmq.QUEUE_NAME_ORDERS, models.TASK_BROWSE, "Products")
+	return ProcessFirstQueuedTask[models.Order](c, rabbitmq.QUEUE_NAME_ORDERS,
+		models.TASK_BROWSE, models.TASK_BROWSE, "Products")
 }
 
 func DoneFirstQueuedOrder(c echo.Context) error {
-	return ProcessFirstQueuedTask[models.Order](c, rabbitmq.QUEUE_NAME_ORDERS, models.TASK_DONE, "Products")
+	return ProcessFirstQueuedTask[models.Order](c, rabbitmq.QUEUE_NAME_ORDERS,
+		models.ACTION_ORDER_DONE, models.TASK_DONE, "Products")
 }
 
 func CancelFirstQueuedOrder(c echo.Context) error {
-	return ProcessFirstQueuedTask[models.Order](c, rabbitmq.QUEUE_NAME_ORDERS, models.TASK_CANCELED, "Products")
+	return ProcessFirstQueuedTask[models.Order](c, rabbitmq.QUEUE_NAME_ORDERS,
+		models.ACTION_ORDER_CANCELED, models.TASK_CANCELED, "Products")
 }

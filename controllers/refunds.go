@@ -48,7 +48,7 @@ func AddRefund(c echo.Context) error {
 	activities := models.Activity{
 		RecieverID: admin.ID,
 		Title:      fmt.Sprintf("We have new refund from %s.", user.Username),
-		Action:     models.ACTION_NEW_RECORD,
+		Action:     models.ACTION_REFUND_NEW,
 		Task:       models.AnyToTask(refund),
 	}
 	if err := notifications.Notify(activities); err != nil {
@@ -106,13 +106,16 @@ func CancelRefund(c echo.Context) error {
 }
 
 func GetFirstQueuedRefund(c echo.Context) error {
-	return ProcessFirstQueuedTask[models.Refund](c, rabbitmq.QUEUE_NAME_REFUNDS, models.TASK_BROWSE, "Order.Products")
+	return ProcessFirstQueuedTask[models.Refund](c, rabbitmq.QUEUE_NAME_REFUNDS,
+		models.TASK_BROWSE, models.TASK_BROWSE, "Order.Products")
 }
 
 func DoneFirstQueuedRefund(c echo.Context) error {
-	return ProcessFirstQueuedTask[models.Refund](c, rabbitmq.QUEUE_NAME_REFUNDS, models.TASK_DONE, "Order.Products")
+	return ProcessFirstQueuedTask[models.Refund](c, rabbitmq.QUEUE_NAME_REFUNDS,
+		models.ACTION_REFUND_DONE, models.TASK_DONE, "Order.Products")
 }
 
 func CancelFirstQueuedRefund(c echo.Context) error {
-	return ProcessFirstQueuedTask[models.Refund](c, rabbitmq.QUEUE_NAME_REFUNDS, models.TASK_CANCELED, "Order.Products")
+	return ProcessFirstQueuedTask[models.Refund](c, rabbitmq.QUEUE_NAME_REFUNDS,
+		models.ACTION_REFUND_CANCELED, models.TASK_CANCELED, "Order.Products")
 }

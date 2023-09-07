@@ -92,12 +92,12 @@ func CreateRecordFromModel[T any](c echo.Context) (*T, error) {
 	return &model, nil
 }
 
-func ProcessFirstQueuedTask[T any](c echo.Context, queueName string, newStatus, preload string) error {
+func ProcessFirstQueuedTask[T any](c echo.Context, queueName string, action, taskAction, preload string) error {
 	if rabbitmq.RestartChannel() != nil {
 		return echo.ErrInternalServerError
 	}
 
-	model, err := rabbitmq.ProcessFirstTask[T](queueName, newStatus, preload)
+	model, err := rabbitmq.ProcessFirstTask[T](queueName, taskAction, preload)
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
@@ -105,17 +105,17 @@ func ProcessFirstQueuedTask[T any](c echo.Context, queueName string, newStatus, 
 		return echo.ErrNotFound
 	}
 
-	if newStatus == models.TASK_BROWSE {
+	if action == models.TASK_BROWSE {
 		return c.JSON(http.StatusOK, model)
 	}
 
 	task := models.AnyToTask(model)
-	title := fmt.Sprintf("Your %s was %s by admin.", task.GetName(), strings.ToLower(newStatus))
+	title := fmt.Sprintf("Your %s was %s by admin.", task.GetName(), strings.ToLower(action))
 
 	activities := models.Activity{
 		RecieverID: task.GetOwnerID(),
 		Title:      title,
-		Action:     newStatus,
+		Action:     action,
 		Task:       task,
 	}
 	if err := notifications.Notify(activities); err != nil {

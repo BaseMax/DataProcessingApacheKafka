@@ -8,7 +8,7 @@ import (
 	"github.com/BaseMax/real-time-notifications-nats-go/models"
 )
 
-func ProcessFirstTask[T any](queueName, newStatus, preload string) (model *T, err error) {
+func ProcessFirstTask[T any](queueName, taskAction, preload string) (model *T, err error) {
 	tasks, err := ch.Consume(queueName, "", false, false, false, false, nil)
 	if err != nil {
 		return nil, err
@@ -44,8 +44,8 @@ func ProcessFirstTask[T any](queueName, newStatus, preload string) (model *T, er
 			if model.GetStatus() != models.TASK_INPROGRESS {
 				task.Ack(false)
 			} else {
-				if newStatus == models.TASK_DONE || newStatus == models.TASK_CANCELED {
-					models.UpdateStatus[T](model.GetID(), newStatus)
+				if taskAction == models.TASK_DONE || taskAction == models.TASK_CANCELED {
+					models.UpdateStatus[T](model.GetID(), taskAction)
 					task.Ack(false)
 				} else {
 					task.Nack(false, true)
