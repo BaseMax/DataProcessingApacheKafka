@@ -10,7 +10,7 @@ require (
 	github.com/labstack/echo/v4 v4.15.3
 	github.com/nats-io/nats.go v1.39.1
 	github.com/prometheus/client_golang v1.16.0
-	github.com/rabbitmq/amqp091-go v1.8.1
+	github.com/rabbitmq/amqp091-go v1.13.0
 	github.com/segmentio/kafka-go v0.4.42
 	github.com/spf13/cobra v1.7.0
 	gorm.io/driver/postgres v1.5.2
